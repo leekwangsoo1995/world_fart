@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:world_fart/config.dart';
 
 class Gallery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+  const countries = Config.countries;
     return
        Scaffold(
         appBar: AppBar(
           title: Text('ギャラリー'),
         ),
-        body: ListView(
-            children: [
-              _menuItem("日本",Image.asset("images/japan.gif")) ,
-              _menuItem("韓国",Image.asset("images/korea.gif")),
-              _menuItem("中国",Image.asset("images/china.gif")),
-            ]
+        body: ListView.builder(
+          itemCount: countries.length,
+          itemBuilder: (BuildContext context, int index) {
+            String key = countries.keys.elementAt(index);
+            return Padding(
+              padding: EdgeInsets.all(2.0),
+              child:
+              _menuItem("$key", Image.asset("images/${countries[key]}.gif")),
+            );
+          },
         ),
     );
   }
@@ -49,3 +55,19 @@ class Gallery extends StatelessWidget {
 }
 
 
+/*
+//下記、保存用その１
+import 'Dart:io' as io;
+// for a file
+io.File(path).exists();
+// for a directory
+io.Directory(path).exists();
+
+//下記、保存用その２
+ImageProvider getImageProvider(File f) {
+  return f.existsSync()
+      ? FileImage(f)
+      : const AssetImage('images/fallback.png');
+}
+
+ */
