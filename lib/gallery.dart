@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:world_fart/config.dart';
 
 class Gallery extends StatelessWidget {
-  void _navigateToNext(BuildContext context,String text) {
+  void _navigateToNext(BuildContext context,String title,String country) {
     // 次画面へ遷移して値を渡す
     Navigator.push(context, new MaterialPageRoute(builder: (context) =>
-    new GalleryDetail(text: text)
+    new GalleryDetailList(title:title,country: country)
     ));
   }
 
@@ -24,13 +25,13 @@ class Gallery extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.all(2.0),
               child:
-              _menuItem(context,"$key", Image.asset("images/${countries[key]}.gif")),
+              _menuItem(context,"$key", Image.asset("images/${countries[key]}.gif"),"${countries[key]}"),
             );
           },
         ),
     );}
 
-  Widget _menuItem(BuildContext context,String title, Image image) {
+  Widget _menuItem(BuildContext context,String title, Image image,String country) {
     return GestureDetector(
       child:Container(
           padding: EdgeInsets.all(8.0),
@@ -54,22 +55,33 @@ class Gallery extends StatelessWidget {
           )
       ),
       onTap: () {
-        _navigateToNext(context,title);
+        _navigateToNext(context,title,country);
       },
     );
   }
 }
 
-class GalleryDetail extends StatelessWidget {
+class GalleryDetailList extends StatelessWidget {
 
-  final String text;
-  GalleryDetail({Key key, @required this.text}) : super(key: key);
+  final String country;
+  final String title;
+  GalleryDetailList({Key key, @required this.country, this.title}) : super(key: key);
+  void initstate(){
+    var myDir = Directory.current;
+    print(myDir);
+
+    myDir.list()
+        .listen((FileSystemEntity entity) {
+      print(entity.path);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Detail screen'),
+          title: new Text('ギャラリー'),
         ),
         body: new Center(
             child: new Column(
@@ -78,7 +90,7 @@ class GalleryDetail extends StatelessWidget {
                   new Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: new Text(
-                        '$text',
+                        '$country'+'$title',
                         style: new TextStyle(
                             fontSize: 50.0
                         ),
@@ -107,10 +119,6 @@ io.File(path).exists();
 io.Directory(path).exists();
 
 //下記、保存用その２
-ImageProvider getImageProvider(File f) {
-  return f.existsSync()
-      ? FileImage(f)
-      : const AssetImage('images/fallback.png');
-}
+
 
  */
